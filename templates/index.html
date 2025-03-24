@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<form method="POST" action="/">
+
+  <p>Выберите комплектующее:</p>
+  <select name="chooseType">
+    <option value="Процессор">Процессор</option>
+    <option value="Видеокарта">Видеокарта</option>
+    <option value="Кулер для ЦП">Кулер для ЦП</option>
+    <option value="Материнская плата">Материнская плата</option>
+    <option value="Оперативная память">Оперативная память</option>
+    <option value="Устройство памяти">Устройство памяти</option>
+    <option value="Блок питания">Блок питания</option>
+    <option value="Корпус">Корпус</option>
+  </select>
+
+  <fieldset class="parameter">
+    <legend>{{ type }}</legend>
+
+    {% for parameter in params[type] %}
+      <fieldset>
+        <legend>{{ parameter }}</legend>
+
+      </fieldset>
+    {% endfor %}
+  </fieldset>
+
+  <button type="submit">Применить</button>
+</form>
+
+{% endblock %}
