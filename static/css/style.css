@@ -2,7 +2,7 @@ h1, main {
     font-family: montserrat
 }
 
-.header__left, .header__right, header {
+.header__left, .header__right, header, .display__items {
     align-items: center;
     display: flex
 }
@@ -52,6 +52,15 @@ header {
 
 main {
     margin-top: 70px
+}
+
+.main__content {
+    display: flex;
+    justify_content: space-between
+}
+
+form.choose {
+    width: 30%
 }
 
 fieldset.parameter {
