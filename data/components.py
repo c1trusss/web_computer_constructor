@@ -96,7 +96,7 @@ class Power(SqlAlchemyBase):
 
 
 class RAM(SqlAlchemyBase):
-    __tablename__ = 'ram'
+    __tablename__ = 'memory'
 
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True)
     title = sqlalchemy.Column(sqlalchemy.String, unique=True)
