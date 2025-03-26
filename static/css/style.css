@@ -60,7 +60,7 @@ main {
 }
 
 form.choose {
-    width: 30%
+    width: 40%
 }
 
 fieldset.parameter {
@@ -90,4 +90,13 @@ div.checkbox {
 
 .display__item {
     border-bottom: 1px solid #000
+}
+
+.add__button {
+    background-color: #2B4562;
+    color: #FFFFFF;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 10px;
+    margin-left: 0px
 }
