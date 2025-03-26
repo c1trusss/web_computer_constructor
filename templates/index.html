@@ -20,10 +20,18 @@
     <fieldset class="parameter">
       <legend>{{ type }}</legend>
 
-      {% for parameter in params[type] %}
-        <fieldset>
+      {% for parameter in params[type]["ru"] %}
+        <fieldset class="attr">
           <legend>{{ parameter }}</legend>
 
+          {% set en_param = params[type]["en"][loop.index0] %}
+
+          {% for variant in attrs[en_param] %}
+            <div class="checkbox">
+              <input type="checkbox" id="{{ variant }}" name="{{ variant }}" value="{{ variant }}">
+              <label for="{{ variant }}">{{ variant }}</label>
+            </div>
+          {% endfor %}
         </fieldset>
       {% endfor %}
     </fieldset>
@@ -31,7 +39,13 @@
     <button type="submit">Применить</button>
   </form>
   <div class="display__items">
-    <p>Я ломал стекло</p>
+    {% for detail in details %}
+      <div class="display__item">
+        <img src="{{ detail.image }}" alt="{{ detail.title }}" width="50">
+        <a href="{{ detail.link }}" class="link__label">{{detail.title}}</a>
+        <p class="cost__label">{{detail.cost}}.-</p>
+      </div>
+    {% endfor %}
   </div>
 </div>
 
