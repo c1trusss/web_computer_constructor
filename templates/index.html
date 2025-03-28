@@ -39,14 +39,18 @@
     <button type="submit">Применить</button>
   </form>
   <div class="display__items">
-    {% for detail in details %}
-      <div class="display__item">
-        <img src="{{ detail.image }}" alt="{{ detail.title }}" width="50">
-        <a href="{{ detail.link }}" class="link__label">{{detail.title}}</a>
-        <p class="cost__label">{{detail.cost}}.-</p>
-        <button class="add__button" value="{{ detail }}">Добавить в сборку</button>
-      </div>
-    {% endfor %}
+    {% if details %}
+      {% for detail in details %}
+        <div class="display__item">
+          <img src="{{ detail.image }}" alt="{{ detail.title }}" width="50">
+          <a href="{{ detail.link }}" class="link__label">{{detail.title}}</a>
+          <p class="cost__label">{{detail.cost}}.-</p>
+          <button class="add__button" value="{{ detail }}">Добавить в сборку</button>
+        </div>
+      {% endfor %}
+    {% else %}
+      <p class="nothing__found">К сожалению, ничего не нашлось</p>
+    {% endif %}
   </div>
 </div>
 
