@@ -1,9 +1,10 @@
 import sqlalchemy
+from sqlalchemy_serializer import SerializerMixin
 
 from .db_session import SqlAlchemyBase
 
 
-class CPU(SqlAlchemyBase):
+class CPU(SqlAlchemyBase, SerializerMixin):
     __tablename__ = 'cpu'
 
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True)
@@ -21,7 +22,7 @@ class CPU(SqlAlchemyBase):
     ]
 
 
-class GPU(SqlAlchemyBase):
+class GPU(SqlAlchemyBase, SerializerMixin):
     __tablename__ = 'gpu'
 
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True)
@@ -39,7 +40,7 @@ class GPU(SqlAlchemyBase):
     ]
 
 
-class Core(SqlAlchemyBase):
+class Core(SqlAlchemyBase, SerializerMixin):
     __tablename__ = 'core'
 
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True)
@@ -56,7 +57,7 @@ class Core(SqlAlchemyBase):
     ]
 
 
-class CPUCoolers(SqlAlchemyBase):
+class CPUCoolers(SqlAlchemyBase, SerializerMixin):
     __tablename__ = 'cpu_coolers'
 
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True)
@@ -73,7 +74,7 @@ class CPUCoolers(SqlAlchemyBase):
     ]
 
 
-class Disk(SqlAlchemyBase):
+class Disk(SqlAlchemyBase, SerializerMixin):
     __tablename__ = 'disk'
 
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True)
@@ -89,7 +90,7 @@ class Disk(SqlAlchemyBase):
     ]
 
 
-class Motherboard(SqlAlchemyBase):
+class Motherboard(SqlAlchemyBase, SerializerMixin):
     __tablename__ = 'motherboard'
 
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True)
@@ -107,7 +108,7 @@ class Motherboard(SqlAlchemyBase):
     ]
 
 
-class Power(SqlAlchemyBase):
+class Power(SqlAlchemyBase, SerializerMixin):
     __tablename__ = 'power'
 
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True)
@@ -123,7 +124,7 @@ class Power(SqlAlchemyBase):
     ]
 
 
-class RAM(SqlAlchemyBase):
+class RAM(SqlAlchemyBase, SerializerMixin):
     __tablename__ = 'memory'
 
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True)

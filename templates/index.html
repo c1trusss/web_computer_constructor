@@ -28,7 +28,7 @@
 
           {% for variant in attrs[en_param] %}
             <div class="checkbox">
-              <input type="checkbox" id="{{ variant }}" name="{{ variant }}" value="{{ variant }}">
+              <input type="checkbox" id="{{ variant }}" name="{{ en_param }}" value="{{ variant }}">
               <label for="{{ variant }}">{{ variant }}</label>
             </div>
           {% endfor %}
