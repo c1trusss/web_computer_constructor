@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="auth__content">
+  <form action="/register" method="get">
+    <button class="register__button" type="submit">Регистрация</button>
+  </form>
+  <p class="login">Уже есть аккаунт? <a class="login__link" href="/login">Войти</a></p>
+</div>
+
+{% endblock %}

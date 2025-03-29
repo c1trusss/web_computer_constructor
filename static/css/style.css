@@ -55,8 +55,7 @@ main {
 }
 
 .main__content {
-    display: flex;
-    justify_content: space-between
+    display: flex
 }
 
 form.choose {
@@ -95,6 +94,14 @@ div.checkbox {
     padding: 20px
 }
 
+.display__items {
+    display: flex;
+    flex-direction: column;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    justify-content: center
+}
+
 .display__item {
     border-bottom: 1px solid #000
 }
@@ -106,4 +113,48 @@ div.checkbox {
     padding: 10px;
     margin: 10px;
     margin-left: 0px
+}
+
+.auth__content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    margin-top: 150px
+}
+
+.register__button {
+    background-color: #2B4562;
+    color: #FFFFFF;
+    border-radius: 5px;
+    border: 0px;
+    padding: 10px;
+    margin-top: 20px;
+    height: 100px;
+    width: 400px;
+    font-size: 24px;
+    cursor: pointer;
+    transition: background-color 0.6s ease
+}
+
+.register__button:hover {
+    background-color: #1f3247
+}
+
+.login__link {
+    color: #2b4562
+    text-decoration: none;
+    transition: color 0.3s
+}
+
+.login__link:hover {
+    color: #a9bfd6
+}
+
+.register__form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    margin-top: 150px;
 }
