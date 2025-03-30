@@ -1,5 +1,14 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Тут будет аккаунт</h1>
+{% if current_user.is_authenticated %}
+    <h1>Тут будет аккаунт</h1>
+    <select name="chooseConfig">
+        {% for config in user_configs %}
+            <option>{{ config }}</option>
+        {% endfor %}
+    </select>
+{% else %}
+    <h1>К сожалению, вы не вошли на сайт</h1>
+{% endif %}
 {% endblock %}

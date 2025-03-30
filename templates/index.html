@@ -45,7 +45,9 @@
           <img src="{{ detail.image }}" alt="{{ detail.title }}" width="50">
           <a href="{{ detail.link }}" class="link__label">{{detail.title}}</a>
           <p class="cost__label">{{detail.cost}}.-</p>
-          <button class="add__button" value="{{ detail }}">Добавить в сборку</button>
+          <form>
+            <button class="add__button" value="{{ detail }}">Добавить в сборку</button>
+          </form>
         </div>
       {% endfor %}
     {% else %}

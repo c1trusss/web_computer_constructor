@@ -178,12 +178,20 @@ def index():
 
 @app.route('/account')
 def account():
-    print(current_user.id)
 
-    # ToDo: Строение json: data[user_id][configuration_name] = configuration
-    # ToDo: Взять по user_id конфигурации, их названия засунуть в ComboBox
-    # ToDo: Под ComboBox разместить поле с выводом текущей конфигурации (скорее всего через циклы в шаблонах)
-    # ToDo: Добавить импорт конфигурации в .txt файл
+    if current_user.is_authenticated:
+        user_id = current_user.id
+
+        params = {}
+
+        # ToDo: Строение json: data[user_id][configuration_name] = configuration
+        # ToDo: Взять по user_id конфигурации, их названия засунуть в ComboBox
+        with open("configurations.json", 'r', encoding='utf8') as file:
+            data = json.load(file)
+            user_configurations = data[user_id]
+            params["user_configs"] = user_configurations
+        # ToDo: Под ComboBox разместить поле с выводом текущей конфигурации (скорее всего через циклы в шаблонах)
+        # ToDo: Добавить импорт конфигурации в .txt файл
 
     return render_template("account.html")
 
