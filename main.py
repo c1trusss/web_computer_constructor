@@ -11,7 +11,7 @@ from flask import (
     redirect
 )
 from flask_restful import Api
-from flask_login import LoginManager, login_user, login_required, logout_user
+from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 
 import components_resourses
 from data import db_session
@@ -178,7 +178,14 @@ def index():
 
 @app.route('/account')
 def account():
-    pass
+    print(current_user.id)
+
+    # ToDo: Строение json: data[user_id][configuration_name] = configuration
+    # ToDo: Взять по user_id конфигурации, их названия засунуть в ComboBox
+    # ToDo: Под ComboBox разместить поле с выводом текущей конфигурации (скорее всего через циклы в шаблонах)
+    # ToDo: Добавить импорт конфигурации в .txt файл
+
+    return render_template("account.html")
 
 
 def main():
