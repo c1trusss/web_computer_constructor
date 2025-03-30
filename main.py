@@ -176,6 +176,11 @@ def index():
     return render_template('index.html', **params)
 
 
+@app.route('/account')
+def account():
+    pass
+
+
 def main():
     db_session.global_init("db/components.db")
     api.add_resource(components_resourses.ComponentResource, '/api/<component_class>/<component_id>')
