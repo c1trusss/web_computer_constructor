@@ -99,6 +99,10 @@ def logout():
 @app.route('/', methods=['GET', 'POST'])
 def index():
 
+    if request.method == 'POST':
+        print('form:')
+        print(request.form)
+
     db_session.global_init('db/components.db')
     session = db_session.create_session()
 
@@ -112,7 +116,7 @@ def index():
         "type": "Процессор"
     }
 
-    if request.method == 'POST':
+    if request.method == 'POST' and request.form.get("submit"):
 
         # Получение типа комплектующего из ComboBox
         selected_value = request.form.get('chooseType')
@@ -145,18 +149,20 @@ def index():
         params["attrs"][attr.name] = sorted(variants)
 
     query = None
-    if request.method == 'POST':
+    if request.method == 'POST' and request.form.get("submit"):
         # Получение активных чекбоксов
         active_checkboxes_dict = {}
         for attr in params['attrs']:
             active_checkboxes = request.form.getlist(attr)
             if active_checkboxes:
                 active_checkboxes_dict[attr] = active_checkboxes
-        query = [
-            eval(
-                f"{search_table.__name__}.{attr}.in_({active_checkboxes_dict[attr]})"
-            ) for attr in active_checkboxes_dict
-        ]
+        query = []
+        for attr in active_checkboxes_dict:
+            # Получаем атрибут модели динамически
+            column = getattr(search_table, attr)
+            print(column)
+            # Добавляем условие фильтрации
+            query.append(column.in_(active_checkboxes_dict[attr]))
     if query:
         details = session.query(search_table).filter(*query)
     else:
@@ -173,6 +179,32 @@ def index():
 
     params['details'] = details_list
 
+    if request.method == 'POST' and request.form.get("add-btn"):
+        detail = json.loads(request.form.get("add-btn"))
+        print('Получены данные:', detail)
+        with open("configurations.json", "r", encoding="utf8") as f:
+            data = json.load(f)
+
+            configurations = data.get(str(current_user.id), {
+                "current_cfg": {}
+            })
+            current_configuration = configurations["current_cfg"]
+
+            current_configuration[detail["component_type"]] = {
+                "cost": detail["cost"],
+                "title": detail["title"]
+            }
+
+            configurations["current_cfg"] = current_configuration
+
+            data[str(current_user.id)] = configurations
+
+            print(data)
+
+        with open("configurations.json", "w", encoding='utf8') as outfile:
+            json.dump(data, outfile, ensure_ascii=False, indent=4)
+
+
     return render_template('index.html', **params)
 
 
@@ -188,7 +220,7 @@ def account():
         # ToDo: Взять по user_id конфигурации, их названия засунуть в ComboBox
         with open("configurations.json", 'r', encoding='utf8') as file:
             data = json.load(file)
-            user_configurations = data[user_id]
+            user_configurations = data.get(user_id, {})
             params["user_configs"] = user_configurations
         # ToDo: Под ComboBox разместить поле с выводом текущей конфигурации (скорее всего через циклы в шаблонах)
         # ToDo: Добавить импорт конфигурации в .txt файл

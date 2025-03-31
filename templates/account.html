@@ -2,10 +2,12 @@
 
 {% block content %}
 {% if current_user.is_authenticated %}
-    <h1>Тут будет аккаунт</h1>
+    <p>Выберите сборку</p>
     <select name="chooseConfig">
         {% for config in user_configs %}
-            <option>{{ config }}</option>
+            {% if config != "current" %}
+                <option>{{ config }}</option>
+            {% endif %}
         {% endfor %}
     </select>
 {% else %}

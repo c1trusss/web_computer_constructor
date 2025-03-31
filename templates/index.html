@@ -3,7 +3,7 @@
 {% block content %}
 
 <div class="main__content">
-  <form method="POST" action="/" class="choose">
+  <form name="choose" method="POST" action="/" class="choose">
 
     <p>Выберите комплектующее:</p>
     <select name="chooseType">
@@ -36,7 +36,7 @@
       {% endfor %}
     </fieldset>
 
-    <button type="submit">Применить</button>
+    <button type="submit" name="submit" value="submit">Применить</button>
   </form>
   <div class="display__items">
     {% if details %}
@@ -45,8 +45,15 @@
           <img src="{{ detail.image }}" alt="{{ detail.title }}" width="50">
           <a href="{{ detail.link }}" class="link__label">{{detail.title}}</a>
           <p class="cost__label">{{detail.cost}}.-</p>
-          <form>
-            <button class="add__button" value="{{ detail }}">Добавить в сборку</button>
+          <form name="add-btn" method="post" action="/">
+            <input type="hidden"
+                   name="add-btn"
+                   value='{{ {
+                     "title": detail.title,
+                     "cost": detail.cost,
+                     "component_type": type
+                   }|tojson|e }}'>
+            <button class="add__button" name="add-btn" value="{{ detail.title }}">Добавить в сборку</button>
           </form>
         </div>
       {% endfor %}
