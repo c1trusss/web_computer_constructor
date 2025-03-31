@@ -19,7 +19,11 @@
     {% for component in configs[cfg_name] %}
         <p>{{component}}: {{configs[cfg_name][component]["title"]}} - {{configs[cfg_name][component]["cost"]}}р.</p>
     {% endfor %}
-    <а class="save-btn" href="{{ current_user.id }}_{{ cfg_name }}" download="{{ current_user.id }}_{{ cfg_name }}">Сохранить в файл</а>
+    <a class="save-btn"
+        href="/files/{{ current_user.id }}/{{ cfg_name }}.txt"
+        download="{{ current_user.id }}_{{ cfg_name }}.txt">
+        Сохранить в файл
+    </a>
 {% else %}
     <h1>К сожалению, вы не вошли на сайт</h1>
 {% endif %}

@@ -8,7 +8,8 @@ from flask import (
     request,
     jsonify,
     make_response,
-    redirect
+    redirect,
+    send_from_directory
 )
 from flask_restful import Api
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
@@ -107,13 +108,14 @@ def index():
 
     with open("metadata.json", 'r', encoding='utf8') as file:
         metadata = json.load(file)
-        user_metadata = metadata.get(str(current_user.id), {})
-
+        if current_user.is_authenticated:
+            user_metadata = metadata.get(str(current_user.id), {})
+        else:
+            user_metadata = {}
     selected_value = "Процессор"
 
     params = {
         "page_title": "Главная страница",
-        "username": "C1truS",
         "params": params_data,
         "type": user_metadata.get("type", selected_value),
         "message": ""
@@ -146,7 +148,7 @@ def index():
         case 'Кулер для ЦП':
             search_table = CPUCoolers
 
-    if selected_value:
+    if selected_value and current_user.is_authenticated:
         user_metadata["type"] = selected_value
         metadata[str(current_user.id)] = user_metadata
         with open("metadata.json", "w", encoding='utf8') as outfile:
@@ -237,7 +239,6 @@ def account():
     with open("metadata.json", 'r', encoding='utf8') as file:
         metadata = json.load(file)
         user_metadata = metadata.get(str(current_user.id), {})
-        print(user_metadata)
 
     params = {}
 
@@ -259,11 +260,30 @@ def account():
             params["cfg_name"] = user_metadata["cfg_name"]
             print(cfgs_data[user_id])
 
-        for config in cfgs_data[user_id]:
-            filename = f"{user_id}_{config}"
+        for config_name in cfgs_data[user_id]:
+            if config_name != 'current_cfg':
+                filename = f"{user_id}_{config_name}"
+                print(config_name)
+                print(filename)
+                config = cfgs_data[user_id][config_name]
 
+                with open(f"files/{filename}.txt", "w", encoding='utf8') as file:
+                    text = '\n'.join([f"{component}: {config[component]["title"]} - {config[component]["cost"]}р."
+                                      for component in config])
+                    text += f"\n\nИтого: {sum([int(config[component]["cost"]) for component in config])}"
+                    file.write(text)
 
     return render_template("account.html", **params)
+
+
+@app.route('/files/<int:user_id>/<string:filename>')
+def download_file(user_id, filename):
+    # Безопасная отдача файла из папки /files
+    return send_from_directory(
+        directory='files',
+        path=f"{user_id}_{filename}",
+        as_attachment=True  # Заставляет браузер скачивать файл
+    )
 
 
 def main():

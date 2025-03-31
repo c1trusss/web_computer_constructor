@@ -12,6 +12,10 @@
             "Корпус": {
                 "cost": 11600,
                 "title": "Zalman Z10 PLUS"
+            },
+            "Кулер для ЦП": {
+                "cost": 3900,
+                "title": "BE Quiet! Pure Rock Slim 2 BK030"
             }
         },
         "test": {
@@ -26,6 +30,38 @@
             "Корпус": {
                 "cost": 11600,
                 "title": "Zalman Z10 PLUS"
+            }
+        },
+        "new": {
+            "Процессор": {
+                "cost": 36000,
+                "title": "Intel Core i5-13600KF"
+            },
+            "Видеокарта": {
+                "cost": 50800,
+                "title": "Gigabyte RTX4060Ti EAGLE"
+            },
+            "Корпус": {
+                "cost": 11600,
+                "title": "Zalman Z10 PLUS"
+            }
+        },
+        "nnnn": {
+            "Процессор": {
+                "cost": 36000,
+                "title": "Intel Core i5-13600KF"
+            },
+            "Видеокарта": {
+                "cost": 50800,
+                "title": "Gigabyte RTX4060Ti EAGLE"
+            },
+            "Корпус": {
+                "cost": 11600,
+                "title": "Zalman Z10 PLUS"
+            },
+            "Кулер для ЦП": {
+                "cost": 3900,
+                "title": "BE Quiet! Pure Rock Slim 2 BK030"
             }
         }
     }
