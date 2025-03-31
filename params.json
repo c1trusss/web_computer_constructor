@@ -10,7 +10,7 @@
             "brand",
             "cpu_group",
             "socket",
-            "type"
+            "delivery_type"
         ]
 
     },
