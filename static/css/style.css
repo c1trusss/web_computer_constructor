@@ -158,3 +158,19 @@ div.checkbox {
     width: 100%;
     margin-top: 150px;
 }
+
+div.save-btn, a.save-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+button.save-btn {
+    background-color: #2B4562;
+    color: #FFFFFF;
+    border-radius: 5px;
+    width: 300px;
+    height: 75px;
+    font-size: 24px;
+}

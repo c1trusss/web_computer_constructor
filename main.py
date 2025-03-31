@@ -99,31 +99,36 @@ def logout():
 @app.route('/', methods=['GET', 'POST'])
 def index():
 
-    if request.method == 'POST':
-        print('form:')
-        print(request.form)
-
     db_session.global_init('db/components.db')
     session = db_session.create_session()
 
     with open("params.json", 'r', encoding='utf8') as f:
         params_data = json.load(f)
 
+    with open("metadata.json", 'r', encoding='utf8') as file:
+        metadata = json.load(file)
+        user_metadata = metadata.get(str(current_user.id), {})
+
+    selected_value = "Процессор"
+
     params = {
         "page_title": "Главная страница",
         "username": "C1truS",
         "params": params_data,
-        "type": "Процессор"
+        "type": user_metadata.get("type", selected_value),
+        "message": ""
     }
 
-    if request.method == 'POST' and request.form.get("submit"):
+    if request.method == 'POST':
 
-        # Получение типа комплектующего из ComboBox
-        selected_value = request.form.get('chooseType')
-        params["type"] = selected_value
+        if 'submit' in request.form:
+            # Получение типа комплектующего из ComboBox
+            selected_value = request.form.get('chooseType')
+            params["type"] = selected_value
+            user_metadata["type"] = selected_value
 
     search_table = None
-    match params["type"]:
+    match user_metadata.get("type", "Процессор"):
         case 'Процессор':
             search_table = CPU
         case 'Видеокарта':
@@ -141,9 +146,16 @@ def index():
         case 'Кулер для ЦП':
             search_table = CPUCoolers
 
+    if selected_value:
+        user_metadata["type"] = selected_value
+        metadata[str(current_user.id)] = user_metadata
+        with open("metadata.json", "w", encoding='utf8') as outfile:
+            json.dump(metadata, outfile, ensure_ascii=False, indent=4)
+
     all_details = session.query(search_table).all()
 
     params["attrs"] = {}
+
     for attr in search_table.columns:
         variants = set(map(lambda x: getattr(x, attr.name), all_details))
         params["attrs"][attr.name] = sorted(variants)
@@ -158,10 +170,7 @@ def index():
                 active_checkboxes_dict[attr] = active_checkboxes
         query = []
         for attr in active_checkboxes_dict:
-            # Получаем атрибут модели динамически
             column = getattr(search_table, attr)
-            print(column)
-            # Добавляем условие фильтрации
             query.append(column.in_(active_checkboxes_dict[attr]))
     if query:
         details = session.query(search_table).filter(*query)
@@ -179,53 +188,82 @@ def index():
 
     params['details'] = details_list
 
-    if request.method == 'POST' and request.form.get("add-btn"):
-        detail = json.loads(request.form.get("add-btn"))
-        print('Получены данные:', detail)
-        with open("configurations.json", "r", encoding="utf8") as f:
-            data = json.load(f)
+    if request.method == 'POST':
+        if 'add-btn' in request.form:
+            detail = json.loads(request.form.get("add-btn"))
+            with open("configurations.json", "r", encoding="utf8") as f:
+                data = json.load(f)
 
-            configurations = data.get(str(current_user.id), {
-                "current_cfg": {}
-            })
-            current_configuration = configurations["current_cfg"]
+                configurations = data.get(str(current_user.id), {
+                    "current_cfg": {}
+                })
+                current_configuration = configurations["current_cfg"]
 
-            current_configuration[detail["component_type"]] = {
-                "cost": detail["cost"],
-                "title": detail["title"]
-            }
+                current_configuration[detail["component_type"]] = {
+                    "cost": detail["cost"],
+                    "title": detail["title"]
+                }
 
-            configurations["current_cfg"] = current_configuration
+                configurations["current_cfg"] = current_configuration
 
-            data[str(current_user.id)] = configurations
+                data[str(current_user.id)] = configurations
 
-            print(data)
+            with open("configurations.json", "w", encoding='utf8') as outfile:
+                json.dump(data, outfile, ensure_ascii=False, indent=4)
 
-        with open("configurations.json", "w", encoding='utf8') as outfile:
-            json.dump(data, outfile, ensure_ascii=False, indent=4)
+        elif 'save-btn' in request.form:
+            cfg_name = request.form.get('cfg_name')
+            if not cfg_name:
+                params["message"] = "Введите название конфигурации!"
+            else:
+                with open("configurations.json", "r", encoding='utf8') as f:
+                    data = json.load(f)
+                    configurations = data.get(str(current_user.id), {})
+                    current_config = configurations["current_cfg"]
+                    configurations[cfg_name] = current_config
+                    data[str(current_user.id)] = configurations
 
+                with open("configurations.json", "w", encoding='utf8') as outfile:
+                    json.dump(data, outfile, ensure_ascii=False, indent=4)
+
+        session.close()
 
     return render_template('index.html', **params)
 
 
-@app.route('/account')
+@app.route('/account', methods=['GET', 'POST'])
 def account():
 
+    with open("metadata.json", 'r', encoding='utf8') as file:
+        metadata = json.load(file)
+        user_metadata = metadata.get(str(current_user.id), {})
+        print(user_metadata)
+
+    params = {}
+
+    if request.method == 'POST':
+        user_metadata["cfg_name"] = request.form.get("chooseConfig")
+
+    params["user_metadata"] = user_metadata
+    metadata[str(current_user.id)] = user_metadata
+
+    with open("metadata.json", "w", encoding='utf8') as outfile:
+        json.dump(metadata, outfile, ensure_ascii=False, indent=4)
+
     if current_user.is_authenticated:
-        user_id = current_user.id
+        user_id = str(current_user.id)
 
-        params = {}
+        with open("configurations.json", 'r', encoding='utf8') as cfgs_file:
+            cfgs_data = json.load(cfgs_file)
+            params["configs"] = cfgs_data[user_id]
+            params["cfg_name"] = user_metadata["cfg_name"]
+            print(cfgs_data[user_id])
 
-        # ToDo: Строение json: data[user_id][configuration_name] = configuration
-        # ToDo: Взять по user_id конфигурации, их названия засунуть в ComboBox
-        with open("configurations.json", 'r', encoding='utf8') as file:
-            data = json.load(file)
-            user_configurations = data.get(user_id, {})
-            params["user_configs"] = user_configurations
-        # ToDo: Под ComboBox разместить поле с выводом текущей конфигурации (скорее всего через циклы в шаблонах)
-        # ToDo: Добавить импорт конфигурации в .txt файл
+        for config in cfgs_data[user_id]:
+            filename = f"{user_id}_{config}"
 
-    return render_template("account.html")
+
+    return render_template("account.html", **params)
 
 
 def main():

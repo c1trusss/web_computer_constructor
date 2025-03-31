@@ -4,6 +4,28 @@
             "Процессор": {
                 "cost": 36000,
                 "title": "Intel Core i5-13600KF"
+            },
+            "Видеокарта": {
+                "cost": 50800,
+                "title": "Gigabyte RTX4060Ti EAGLE"
+            },
+            "Корпус": {
+                "cost": 11600,
+                "title": "Zalman Z10 PLUS"
+            }
+        },
+        "test": {
+            "Процессор": {
+                "cost": 36000,
+                "title": "Intel Core i5-13600KF"
+            },
+            "Видеокарта": {
+                "cost": 50800,
+                "title": "Gigabyte RTX4060Ti EAGLE"
+            },
+            "Корпус": {
+                "cost": 11600,
+                "title": "Zalman Z10 PLUS"
             }
         }
     }

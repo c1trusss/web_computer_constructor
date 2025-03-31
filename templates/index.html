@@ -7,14 +7,24 @@
 
     <p>Выберите комплектующее:</p>
     <select name="chooseType">
-      <option value="Процессор">Процессор</option>
-      <option value="Видеокарта">Видеокарта</option>
-      <option value="Кулер для ЦП">Кулер для ЦП</option>
-      <option value="Материнская плата">Материнская плата</option>
-      <option value="Оперативная память">Оперативная память</option>
-      <option value="Устройство памяти">Устройство памяти</option>
-      <option value="Блок питания">Блок питания</option>
-      <option value="Корпус">Корпус</option>
+      {% set options = [
+      "Процессор",
+      "Видеокарта",
+      "Кулер для ЦП",
+      "Материнская плата",
+      "Оперативная память",
+      "Устройство памяти",
+      "Блок питания",
+      "Корпус"
+      ] %}
+      {% for option in options %}
+        {% if type == option %}
+          <option value="{{ option }}" selected>{{ option }}</option>
+        {% else %}
+        <option value="{{ option }}">{{ option }}</option>
+        {% endif %}
+      {% endfor %}
+
     </select>
 
     <fieldset class="parameter">
@@ -61,6 +71,17 @@
       <p class="nothing__found">К сожалению, ничего не нашлось</p>
     {% endif %}
   </div>
+  <div class="save-btn">
+    <button class="save-btn" onclick="document.getElementById('nameConfig').showModal()">Сохранить сборку</button>
+  </div>
+  <dialog id="nameConfig">
+    <form name="config" method="post" action="/">
+      <label for="cfg_name">Название сборки:</label>
+      <input type="text" id="cfg_name" name="cfg_name">
+      <button type="submit" name="save-btn" value="save">Сохранить</button>
+      <p>{{ message }}</p>
+    </form>
+</dialog>
 </div>
 
 {% endblock %}
