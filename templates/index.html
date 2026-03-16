@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="main__content">
+  <form name="choose" method="POST" action="/" class="choose">
+
+    <p>Выберите комплектующее:</p>
+    <select name="chooseType">
+      {% set options = [
+      "Процессор",
+      "Видеокарта",
+      "Кулер для ЦП",
+      "Материнская плата",
+      "Оперативная память",
+      "Устройство памяти",
+      "Блок питания",
+      "Корпус"
+      ] %}
+      {% for option in options %}
+        {% if type == option %}
+          <option value="{{ option }}" selected>{{ option }}</option>
+        {% else %}
+        <option value="{{ option }}">{{ option }}</option>
+        {% endif %}
+      {% endfor %}
+
+    </select>
+
+    <fieldset class="parameter">
+      <legend>{{ type }}</legend>
+
+      {% for parameter in params[type]["ru"] %}
+        <fieldset class="attr">
+          <legend>{{ parameter }}</legend>
+
+          {% set en_param = params[type]["en"][loop.index0] %}
+
+          {% for variant in attrs[en_param] %}
+            <div class="checkbox">
+              <input type="checkbox" id="{{ variant }}" name="{{ en_param }}" value="{{ variant }}">
+              <label for="{{ variant }}">{{ variant }}</label>
+            </div>
+          {% endfor %}
+        </fieldset>
+      {% endfor %}
+    </fieldset>
+
+    <button type="submit" name="submit" value="submit">Применить</button>
+  </form>
+  <div class="display__items">
+    {% if details %}
+      {% for detail in details %}
+        <div class="display__item">
+          <img src="{{ detail.image }}" alt="{{ detail.title }}" width="50">
+          <a href="{{ detail.link }}" class="link__label">{{detail.title}}</a>
+          <p class="cost__label">{{detail.cost}}.-</p>
+          <form name="add-btn" method="post" action="/">
+            <input type="hidden"
+                   name="add-btn"
+                   value='{{ {
+                     "title": detail.title,
+                     "cost": detail.cost,
+                     "component_type": type
+                   }|tojson|e }}'>
+            <button class="add__button" name="add-btn" value="{{ detail.title }}">Добавить в сборку</button>
+          </form>
+        </div>
+      {% endfor %}
+    {% else %}
+      <p class="nothing__found">К сожалению, ничего не нашлось</p>
+    {% endif %}
+  </div>
+  <div class="save-btn">
+    <button class="save-btn" onclick="document.getElementById('nameConfig').showModal()">Сохранить сборку</button>
+  </div>
+  <dialog id="nameConfig">
+    <form name="config" method="post" action="/">
+      <label for="cfg_name">Название сборки:</label>
+      <input type="text" id="cfg_name" name="cfg_name">
+      <button type="submit" name="save-btn" value="save">Сохранить</button>
+      <p>{{ message }}</p>
+    </form>
+</dialog>
+</div>
+
+{% endblock %}

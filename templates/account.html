@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% if current_user.is_authenticated %}
+    <p>Выберите сборку:</p>
+    <form name="chooseConfig" method="post" action="/account">
+        <select name="chooseConfig">
+            <option value="default" selected>---Выберите конфигурацию---</option>
+            {% for config in configs %}
+                {% if config != "current_cfg" %}
+                    <option>{{ config }}</option>
+                {% endif %}
+            {% endfor %}
+        </select>
+
+        <button type="submit">Посмотреть</button>
+    </form>
+
+    {% for component in configs[cfg_name] %}
+        <p>{{component}}: {{configs[cfg_name][component]["title"]}} - {{configs[cfg_name][component]["cost"]}}р.</p>
+    {% endfor %}
+    <a class="save-btn"
+        href="/files/{{ current_user.id }}/{{ cfg_name }}.txt"
+        download="{{ current_user.id }}_{{ cfg_name }}.txt">
+        Сохранить в файл
+    </a>
+{% else %}
+    <h1>К сожалению, вы не вошли на сайт</h1>
+{% endif %}
+
+{% endblock %}
